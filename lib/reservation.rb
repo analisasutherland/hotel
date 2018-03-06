@@ -10,6 +10,15 @@ module Hotel
       @check_in = input[:check_in]
       @check_out = input[:check_out]
 
+      # Checking to make sure that both reservation id and room id are positive integers
+      if @res_id.class != Integer || @res_id <= 0
+        raise ArgumentError.new("ID must be a number and positive. (got #{input[:res_id]})")
+      end
+
+      if @room_id.class != Integer || @room_id <= 0
+        raise ArgumentError.new("ID must be a number and positive. (got #{input[:room_id]})")
+      end
+      # checking to make sure that check_in and check_out are instances of Date class
       if @check_in.class != Date || @check_out.class != Date
         raise ArgumentError.new("You must provide dates (got #{input[:check_in]} and #{input[:check_out]})")
       end

@@ -69,5 +69,26 @@ describe "Reservation" do
       }
       proc{ Hotel::Reservation.new(@bad_date_reservation)}.must_raise ArgumentError
     end
+
+    it "must have a positive integer as an ID" do
+      start_date = Date.new(2018,3,1)
+      check_out_date = Date.new(2018,3,5)
+
+      bad_id_reservation = {
+        res_id: "not an integer",
+        room_id: 03,
+        check_in: start_date,
+        check_out: check_out_date,
+      }
+      proc{Hotel::Reservation.new(bad_id_reservation)}.must_raise ArgumentError
+
+      negative_id_reservation = {
+        res_id: 1,
+        room_id: -03,
+        check_in: start_date,
+        check_out: check_out_date,
+      }
+      proc{Hotel::Reservation.new(negative_id_reservation)}.must_raise ArgumentError
+    end
   end
 end
