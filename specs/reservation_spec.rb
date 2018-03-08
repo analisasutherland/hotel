@@ -90,5 +90,11 @@ describe "Reservation" do
       }
       proc{Hotel::Reservation.new(negative_id_reservation)}.must_raise ArgumentError
     end
+
+    # describe "days_booked" do
+    #   it "can calculate days booked" do
+    #
+    #   end
+    # end
   end
 end

@@ -24,6 +24,8 @@ module Hotel
       end
     end
 
-  end
 
+    # TO DO - HM: Summarize days booked by using end_date and start_date to calculate nights stayed. Remember to account for the last day not being a paying day- Checking out that day
+    # def days_booked
+  end
 end
