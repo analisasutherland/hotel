@@ -13,6 +13,7 @@ describe "Reservation" do
       check_out: check_out_date,
     }
   end
+
   describe "#initialize" do
     it "creates an instance of Reservation" do
       test_reservation = Hotel::Reservation.new(@fake_reservation)
@@ -90,11 +91,28 @@ describe "Reservation" do
       }
       proc{Hotel::Reservation.new(negative_id_reservation)}.must_raise ArgumentError
     end
+  end
 
-    # describe "days_booked" do
-    #   it "can calculate days booked" do
+  describe "#length_of_stay" do
+    it "can calculate days booked" do
+      test_reservation = Hotel::Reservation.new(@fake_reservation)
+
+      test_reservation.length_of_stay.must_equal 4
+    end
+  end
+
+  describe "#calculate_cost" do
+    it "can accurately calculate the cost for a reservation" do
+      test_reservation = Hotel::Reservation.new(@fake_reservation)
+
+      test_reservation.calculate_cost.must_equal 800
+    end
+    # it "can return 0 if no nights are reserved" do
     #
-    #   end
+    # end
+    #
+    # it "does not charge for the check_out date" do
+    #
     # end
   end
 end

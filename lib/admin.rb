@@ -18,6 +18,7 @@ module Hotel
 
     #M: Check_availble w/ list of reservation by dates (may use reservation list). Maybe Call HM2?
     def check_availability
+      # WILL NEED TO ADD CHECK IN AND CHECK OUT ARGUMENTS IN ORDER TO CALL HM2 OVERLAP
       room_id = nil
       # Checking if there are no previous reservations
       if @reservations.length == 0
@@ -26,6 +27,7 @@ module Hotel
         # checking if there are no rooms available
         ROOM_LIST.each do |id|
           @reservations.each do |res|
+            #CALL HM2 FOR OVERLAP CHECK
             if
               res.room_id != id
               return room_id
@@ -36,22 +38,20 @@ module Hotel
       end
     end
 
-
-    #M: create_reservation (can get cost in this) Can Possibly Call HM1
-    # def create_reservation
+    # CURRENTLY WORKING: WAITING FOR OVERLAP method
+    # #M: create_reservation (can get cost in this) Can Possibly Call HM1
+    # def create_reservation (check_in, check_out)
+    #   room_id = check_availability
+    #   res_id = Random.new_seed
+    #   new_reservation = Hotel::Reservation.new({
+    #     res_id: res_id,
+    #     room_id: room_id,
+    #     check_in: Date.parse(check_in),
+    #     check_out: Date.parse(check_out)
+    #     })
     #
-    # end
-
-
-    #HM1: Calculcate Cost
-    # def calculate_cost
-    #
-    # end
-
-
-    # HM2: Needs to check if dates overlap, take in dates and determine overlap with self (boolean?)
-    # def check_for_overlap
-    #
+    #   @reservations << new_reservation
+    #   return new_reservation
     # end
 
     #M: pull up a list of all reservations by date
