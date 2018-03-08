@@ -24,10 +24,10 @@ module Hotel
         room_id = ROOM_LIST.sample
       elsif
         # checking if there are no rooms available
-        ROOM_LIST.each do |room_id|
+        ROOM_LIST.each do |id|
           @reservations.each do |res|
             if
-              res.room_id != room_id
+              res.room_id != id
               return room_id
             end
             return UNAVAILABLE_ROOM

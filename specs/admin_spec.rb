@@ -2,8 +2,9 @@ require_relative 'spec_helper'
 require 'pry'
 describe "Admin" do
   before do
-    @no_reservations = []
-
+    # Empty array with no reservations
+    @reservations = []
+    # Really full array that iterates over all room ids
     x = 0
     @full_reservations = []
     Hotel::ROOM_LIST.each do |room_id|
@@ -15,7 +16,7 @@ describe "Admin" do
         })
       end
 
-      # Really full array that iterates over all room ids
+
 
       @fake_reservation_no_rm = {
         res_id: 1,
@@ -24,7 +25,14 @@ describe "Admin" do
         check_out: Date.new(2018,3,5),
       }
 
-      @fake_reservation_rm_id = {
+      @fake_reservation_rm_id_1 = {
+        res_id: 2,
+        room_id: 1,
+        check_in: Date.new(2018,2,1),
+        check_out: Date.new(2018,2,5),
+      }
+
+      @fake_reservation_rm_id_2 = {
         res_id: 2,
         room_id: 2,
         check_in: Date.new(2018,2,1),
@@ -33,6 +41,7 @@ describe "Admin" do
 
       @fake_admin = Hotel::Admin.new
     end
+
     describe "#initialize" do
       it "is an instance of Admin" do
         @fake_admin.must_be_kind_of Hotel::Admin
@@ -43,7 +52,7 @@ describe "Admin" do
       end
     end
 
-    describe "check_availability" do
+    describe "#check_availability" do
       it "can find a single room within ROOM_LIST" do
         room_id = @fake_admin.check_availability
 
@@ -59,11 +68,17 @@ describe "Admin" do
         room_id.must_equal "No available rooms."
       end
 
-      it "if rooms are taken, it assigns other rooms" do
-        
+      it "if some rooms are taken, it assigns other rooms" do
+        @reservations << Hotel::Reservation.new(@fake_reservation_rm_id_1)
+
+        @reservations << Hotel::Reservation.new(@fake_reservation_rm_id_2)
+
+        @fake_admin.reservations = @reservations
+
+        room_id = @fake_admin.check_availability
+        room_id.wont_equal 1 || 2
       end
     end
-
     # def create_reservation
     # RESERVATION.new(id, check_availability method for the rm id, end_date, start date)
     # @reservations << new reservation
@@ -75,4 +90,4 @@ describe "Admin" do
     # describe "list_reservations" do
     #
     # end
-  end
+end
