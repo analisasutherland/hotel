@@ -1,20 +1,20 @@
 require_relative 'spec_helper'
 
 describe "Reservation" do
-  # Test data to use in the following tests
-  before do
-    start_date = Date.new(2018,3,1)
-    check_out_date = Date.new(2018,3,5)
-
-    @fake_reservation = {
-      res_id: 1,
-      room_id: 03,
-      check_in: start_date,
-      check_out: check_out_date,
-    }
-  end
-
+  # Test data to use in the following test
   describe "#initialize" do
+    before do
+      start_date = Date.new(2018,3,1)
+      check_out_date = Date.new(2018,3,5)
+
+      @fake_reservation = {
+        res_id: 1,
+        room_id: 03,
+        check_in: start_date,
+        check_out: check_out_date,
+      }
+    end
+
     it "creates an instance of Reservation" do
       test_reservation = Hotel::Reservation.new(@fake_reservation)
 
@@ -94,6 +94,18 @@ describe "Reservation" do
   end
 
   describe "#length_of_stay" do
+    before do
+      start_date = Date.new(2018,3,1)
+      check_out_date = Date.new(2018,3,5)
+
+      @fake_reservation = {
+        res_id: 1,
+        room_id: 03,
+        check_in: start_date,
+        check_out: check_out_date,
+      }
+    end
+
     it "can calculate days booked" do
       test_reservation = Hotel::Reservation.new(@fake_reservation)
 
@@ -102,17 +114,27 @@ describe "Reservation" do
   end
 
   describe "#calculate_cost" do
+    before do
+      start_date = Date.new(2018,3,1)
+      check_out_date = Date.new(2018,3,5)
+
+      @fake_reservation = {
+        res_id: 1,
+        room_id: 03,
+        check_in: start_date,
+        check_out: check_out_date,
+      }
+    end
     it "can accurately calculate the cost for a reservation" do
       test_reservation = Hotel::Reservation.new(@fake_reservation)
 
       test_reservation.calculate_cost.must_equal 800
     end
-    # it "can return 0 if no nights are reserved" do
-    #
-    # end
-    #
-    # it "does not charge for the check_out date" do
-    #
-    # end
+
+    it "does not charge for the check_out date" do
+      test_reservation = Hotel::Reservation.new(@fake_reservation)
+
+      test_reservation.calculate_cost.wont_equal 1000
+    end
   end
 end

@@ -34,7 +34,6 @@ module Hotel
 
     #HM1: Calculcate Cost
     def calculate_cost
-      #IP:****************************
       nights_booked = length_of_stay
       cost = (nights_booked * ROOM_RATE)
       return cost
