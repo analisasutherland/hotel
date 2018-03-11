@@ -1,7 +1,6 @@
 require_relative 'spec_helper'
 require 'pry'
 describe "Admin" do
-
   describe "#initialize" do
     before do
       @fake_admin = Hotel::Admin.new
@@ -32,76 +31,65 @@ describe "Admin" do
           check_in: Date.new(2018,2,1),
           check_out: Date.new(2018,2,5),
           })
+        end
+
+        @fake_reservation_rm_id_1 = {
+          res_id: 2,
+          room_id: 1,
+          check_in: Date.new(2018,2,1),
+          check_out: Date.new(2018,2,5),
+        }
+
+        @fake_reservation_rm_id_2 = {
+          res_id: 2,
+          room_id: 2,
+          check_in: Date.new(2018,2,1),
+          check_out: Date.new(2018,2,5),
+        }
+      end
+      it "can find a single room within ROOM_LIST" do
+        check_in_test = Date.new(2018,3,3)
+        check_out_test = check_in_test + 4
+
+        room_id = @fake_admin.check_availability(check_in_test, check_out_test)
+
+        room_id.must_be :>, 0
+        room_id.must_be :<, 20
       end
 
-      @fake_reservation_rm_id_1 = {
-        res_id: 2,
-        room_id: 1,
-        check_in: Date.new(2018,2,1),
-        check_out: Date.new(2018,2,5),
-      }
+      it "alerts you when all rooms are full" do
+        check_in_test = Date.new(2018,3,3)
+        check_out_test = check_in_test + 4
 
-      @fake_reservation_rm_id_2 = {
-        res_id: 2,
-        room_id: 2,
-        check_in: Date.new(2018,2,1),
-        check_out: Date.new(2018,2,5),
-      }
+        proc{@fake_admin.reservations = @full_reservations
+
+          room_id = @fake_admin.check_availability(check_in_test, check_out_test)}.must_raise ArgumentError
+        end
+
+        it "if some rooms are taken, it assigns other rooms" do
+          check_in_test = Date.new(2018,4,3)
+          check_out_test = check_in_test + 9
+
+          res_1 = Hotel::Reservation.new(@fake_reservation_rm_id_1)
+
+          res_2 = Hotel::Reservation.new(@fake_reservation_rm_id_2)
+
+          room_id = @fake_admin.check_availability(check_in_test, check_out_test)
+          room_id.wont_equal res_1.room_id || res_2.room_id 
+        end
+      end
     end
 
-    it "can find a single room within ROOM_LIST" do
-      check_in_test = Date.new(2018,3,3)
-      check_out_test = check_in_test + 4
+    describe "#create_reservation" do
+      before do
+        @fake_admin = Hotel::Admin.new
 
-      room_id = @fake_admin.check_availability(check_in_test, check_out_test)
+        @check_in_test = Date.new(2018,3,12)
+        @check_out_test = Date.new(2018,3,17)
+      end
 
-      room_id.must_be :>,0
-      room_id.must_be :<,20
+      it "can create an instance of reservation" do
+        @fake_admin.create_reservation(@check_in_test,@check_out_test).must_be_kind_of Hotel::Reservation
+      end
     end
-
-    it "alerts you when all rooms are full" do
-      check_in_test = Date.new(2018,3,3)
-      check_out_test = check_in_test + 4
-
-      @fake_admin.reservations = @full_reservations
-
-      room_id = @fake_admin.check_availability(check_in_test, check_out_test)
-
-      room_id.must_equal "No available rooms."
-    end
-
-    it "if some rooms are taken, it assigns other rooms" do
-      check_in_test = Date.new(2018,3,3)
-      check_out_test = check_in_test + 4
-
-      @reservations << Hotel::Reservation.new(@fake_reservation_rm_id_1)
-
-      @reservations << Hotel::Reservation.new(@fake_reservation_rm_id_2)
-
-      @fake_admin.reservations = @reservations
-
-      room_id = @fake_admin.check_availability(check_in_test, check_out_test)
-      room_id.wont_equal 1 || 2
-    end
-  end
-
-  # RESERVATION.new(id, check_availability method for the rm id, end_date, start date)
-  # @reservations << new reservation
-
-  # describe "#create_reservation" do
-  #   it "can create an instance of reservation" do
-  #     check_in = "2018-03-12"
-  #     check_out = "2018-03-17"
-  #     @fake_admin.create_reservation(check_in,check_out).must_be_kind_of Hotel::Reservation
-  #   end
-  #
-  #   # it "can assign a room to a reservation" do
-  #   #
-  #   # end
-  # end
-
-  # describe "list_reservations" do
-  #
-  # end
-  # end
-end
+    # describe "list_reservations" do

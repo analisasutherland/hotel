@@ -5,7 +5,6 @@ module Hotel
   # SETTING ROOM_LIST AND ROOM_RATE TO CONSTANTS
   ROOM_LIST = Array.new(20) {|i| i.to_i + 1 }
   ROOM_RATE = 200
-  UNAVAILABLE_ROOM = "No available rooms."
 
   class Admin
     attr_accessor :reservations
@@ -24,6 +23,7 @@ module Hotel
       # Checking if there are no previous reservations
       if @reservations.length == 0
         room_id = ROOM_LIST.sample
+        return room_id
       else
         # checking if there are no rooms available
         @reservations.each do |reservation|
@@ -35,30 +35,24 @@ module Hotel
             return room_id
           end
           if available_rooms.length == 0
-            return UNAVAILABLE_ROOM
+            raise ArgumentError.new("All rooms are currently booked at this time #{start_date} - #{end_date}.")
           end
         end
       end
     end
-  end
-end
-# CURRENTLY WORKING:
-# #M: create_reservation (can get cost in this) Can Possibly Call HM1
-# def create_reservation (check_in, check_out)
-#   room_id = check_availability
-#   res_id = Random.new_seed
-#   new_reservation = Hotel::Reservation.new({
-#     res_id: res_id,
-#     room_id: room_id,
-#     check_in: Date.parse(check_in),
-#     check_out: Date.parse(check_out)
-#     })
-#
-#   @reservations << new_reservation
-#   return new_reservation
-# end
 
-#M: pull up a list of all reservations by date
-# def list_reservations
-#
-# end
+    #M: create_reservation (can get cost in this) Can Possibly Call HM1
+    def create_reservation(check_in,check_out)
+      room_id = check_availability(check_in,check_out)
+      res_id = Random.new_seed
+      new_reservation = Hotel::Reservation.new({
+        res_id: res_id,
+        room_id: room_id,
+        check_in: Date.parse(check_in.to_s),
+        check_out: Date.parse(check_out.to_s)
+        })
+        @reservations << new_reservation
+        return new_reservation
+      end
+    end
+  end
