@@ -39,12 +39,10 @@ module Hotel
       return cost
     end
 
-
-    #NEXT TO DO***************************
     # HM2: Needs to check if dates overlap, take in dates and determine overlap with self (boolean?)
     def overlap?(check_in, check_out)
       if
-        ((self.check_in >= check_in && self.check_in < check_out) || (self.check_out <= check_out && self.check_out > check_in)) || ((self.check_in <= check_in && self.check_out <= check_in && self.check_out >= check_out) || (self.check_in < check_in && self.check_out > check_out) ||  (self.check_in == check_in && self.check_out == check_out)) 
+        ((self.check_in >= check_in && self.check_in < check_out) || (self.check_out <= check_out && self.check_out > check_in)) || ((self.check_in <= check_in && self.check_out <= check_in && self.check_out >= check_out) || (self.check_in < check_in && self.check_out > check_out) ||  (self.check_in == check_in && self.check_out == check_out))
         return true
       else
         return false

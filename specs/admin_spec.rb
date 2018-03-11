@@ -50,28 +50,37 @@ describe "Admin" do
     end
 
     it "can find a single room within ROOM_LIST" do
-      room_id = @fake_admin.check_availability
+      check_in_test = Date.new(2018,3,3)
+      check_out_test = check_in_test + 4
+
+      room_id = @fake_admin.check_availability(check_in_test, check_out_test)
 
       room_id.must_be :>,0
       room_id.must_be :<,20
     end
 
     it "alerts you when all rooms are full" do
+      check_in_test = Date.new(2018,3,3)
+      check_out_test = check_in_test + 4
+
       @fake_admin.reservations = @full_reservations
 
-      room_id = @fake_admin.check_availability
+      room_id = @fake_admin.check_availability(check_in_test, check_out_test)
 
       room_id.must_equal "No available rooms."
     end
 
     it "if some rooms are taken, it assigns other rooms" do
+      check_in_test = Date.new(2018,3,3)
+      check_out_test = check_in_test + 4
+
       @reservations << Hotel::Reservation.new(@fake_reservation_rm_id_1)
 
       @reservations << Hotel::Reservation.new(@fake_reservation_rm_id_2)
 
       @fake_admin.reservations = @reservations
 
-      room_id = @fake_admin.check_availability
+      room_id = @fake_admin.check_availability(check_in_test, check_out_test)
       room_id.wont_equal 1 || 2
     end
   end
