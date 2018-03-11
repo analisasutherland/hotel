@@ -1,3 +1,4 @@
+require 'pry'
 module Hotel
   class Reservation
 
@@ -24,15 +25,14 @@ module Hotel
       end
     end
 
-    #IP:****************************
-    #HM: Summarize days booked by using end_date and start_date to calculate nights stayed. Remember to account for the last day not being a paying day- Checking out that day
+    #HM3: Summarize nights booked by using end_date and start_date
     def length_of_stay
       length_of_stay = (@check_out - @check_in)
-
       return length_of_stay
     end
 
     #HM1: Calculcate Cost
+    #Todo: Add ability to search for price by id?*******************************
     def calculate_cost
       nights_booked = length_of_stay
       cost = (nights_booked * ROOM_RATE)
@@ -42,8 +42,13 @@ module Hotel
 
     #NEXT TO DO***************************
     # HM2: Needs to check if dates overlap, take in dates and determine overlap with self (boolean?)
-    # def check_for_overlap
-    #
-    # end
+    def overlap?(check_in, check_out)
+      if
+        ((self.check_in >= check_in && self.check_in < check_out) || (self.check_out <= check_out && self.check_out > check_in)) || ((self.check_in <= check_in && self.check_out <= check_in && self.check_out >= check_out) || (self.check_in < check_in && self.check_out > check_out) ||  (self.check_in == check_in && self.check_out == check_out)) 
+        return true
+      else
+        return false
+      end
+    end
   end
 end

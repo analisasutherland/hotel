@@ -1,4 +1,5 @@
 require_relative 'spec_helper'
+require 'pry'
 
 describe "Reservation" do
   # Test data to use in the following test
@@ -136,5 +137,91 @@ describe "Reservation" do
 
       test_reservation.calculate_cost.wont_equal 1000
     end
+  end
+
+  describe "#overlap?" do
+    before do
+      @start_date_1 = Date.new(2018,3,1)
+      @end_date_1 = @start_date_1 + 4
+      @fake_reservation_1 = {
+        res_id: 1,
+        room_id: 03,
+        check_in: @start_date_1,
+        check_out: @end_date_1,
+      }
+      @reservation = Hotel::Reservation.new(@fake_reservation_1)
+    end
+    # Completely before
+    it "returns false for dates completely before" do
+      start_date_2 = @start_date_1 - 3
+      end_date_2 = @start_date_1 - 1
+
+      @reservation.overlap?(start_date_2, end_date_2).must_equal false
+    end
+
+    # Completely after
+    it "returns false for dates completely after" do
+      start_date_2 = @end_date_1 + 1
+      end_date_2 = @end_date_1 + 3
+
+      @reservation.overlap?(start_date_2, end_date_2).must_equal false
+    end
+
+    # Ends on the checkin date
+    it "returns false if the start date falls on an end date of a previous reservation" do
+      start_date_2 = @end_date_1 + 0
+      end_date_2 = @end_date_1 + 3
+
+      @reservation.overlap?(start_date_2, end_date_2).must_equal false
+    end
+
+    #  Starts on the checkout date
+    it "returns false if the end date falls on the start date of a previous reservation" do
+      start_date_2 = @start_date_1 - 3
+      end_date_2 = @start_date_1 - 0
+
+      @reservation.overlap?(start_date_2, end_date_2).must_equal false
+    end
+
+    # overlap?s in the front
+    it "returns true if the start date falls within a previous reservation" do
+      start_date_2 = @start_date_1 + 1
+      end_date_2 = @end_date_1 +1
+
+      @reservation.overlap?(start_date_2, end_date_2).must_equal true
+    end
+
+    # overlap?s in the back
+    it "returns true if the end date falls within a previous reservation" do
+      start_date_2 = @start_date_1 - 4
+      end_date_2 = @start_date_1 + 1
+
+      @reservation.overlap?(start_date_2, end_date_2).must_equal true
+    end
+
+    # Completely contained
+    it "returns true if the new reservation starts and ends within a previous reservation" do
+      start_date_2 = @start_date_1 + 1
+      end_date_2 = @end_date_1 - 1
+
+      @reservation.overlap?(start_date_2, end_date_2).must_equal true
+    end
+
+    # Completely containing
+    it "returns true if the new reservation tries to overlap? an exsisting reservation" do
+      start_date_2 = @start_date_1 - 1
+      end_date_2 = @end_date_1 + 1
+
+      @reservation.overlap?(start_date_2, end_date_2).must_equal true
+    end
+
+    # The same dates as the previous reservation
+    it "returns true if the new reservation is the exact same dates as a previous reservation" do
+      start_date_2 = @start_date_1 + 0
+      end_date_2 = @end_date_1 + 0
+
+      @reservation.overlap?(start_date_2, end_date_2).must_equal true
+    end
+
   end
 end
