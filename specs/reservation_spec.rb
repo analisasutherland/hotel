@@ -1,5 +1,4 @@
 require_relative 'spec_helper'
-require 'pry'
 
 describe "Reservation" do
   # Test data to use in the following test

@@ -58,7 +58,7 @@ describe "Admin" do
       end
 
       it "alerts you when all rooms are full" do
-        check_in_test = Date.new(2018,3,3)
+        check_in_test = Date.new(2018,2,3)
         check_out_test = check_in_test + 4
 
         proc{@fake_admin.reservations = @full_reservations
@@ -74,8 +74,13 @@ describe "Admin" do
 
           res_2 = Hotel::Reservation.new(@fake_reservation_rm_id_2)
 
+          @fake_admin.reservations << res_1
+
+          @fake_admin.reservations << res_2
+
           room_id = @fake_admin.check_availability(check_in_test, check_out_test)
-          room_id.wont_equal res_1.room_id || res_2.room_id 
+
+          room_id.wont_equal res_1.room_id || res_2.room_id
         end
       end
     end

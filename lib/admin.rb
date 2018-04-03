@@ -18,7 +18,7 @@ module Hotel
     #M: Check_availble w/ list of reservation by dates (may use reservation list). Maybe Call HM2?
     def check_availability(start_date, end_date)
       # WILL NEED TO ADD CHECK IN AND CHECK OUT ARGUMENTS IN ORDER TO CALL HM2 OVERLAP
-      available_rooms = []
+      available_rooms = ROOM_LIST.dup
       room_id = nil
       # Checking if there are no previous reservations
       if @reservations.length == 0
@@ -27,20 +27,19 @@ module Hotel
       else
         # checking if there are no rooms available
         @reservations.each do |reservation|
-          reservation.overlap?(start_date, end_date)
-          if false
-            available_rooms << reservation.id
-
-            room_id = available_rooms.sample
-            return room_id
+          # FIXME:
+          if reservation.overlap?(start_date, end_date)
+            available_rooms.delete(reservation.room_id)
           end
-          if available_rooms.length == 0
-            raise ArgumentError.new("All rooms are currently booked at this time #{start_date} - #{end_date}.")
-          end
+        end
+        if available_rooms.length == 0
+          raise ArgumentError.new("All rooms are currently booked at this time #{start_date} - #{end_date}.")
+        else
+          room_id = available_rooms.sample
+          return room_id
         end
       end
     end
-
     #M: create_reservation (can get cost in this) Can Possibly Call HM1
     def create_reservation(check_in,check_out)
       room_id = check_availability(check_in,check_out)
