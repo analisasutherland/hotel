@@ -1,5 +1,4 @@
 require_relative 'reservation'
-require 'pry'
 
 module Hotel
   # SETTING ROOM_LIST AND ROOM_RATE TO CONSTANTS
@@ -7,7 +6,7 @@ module Hotel
   ROOM_RATE = 200
 
   class Admin
-    attr_accessor :reservations
+    attr_reader :reservations
 
     def initialize
       # list of the all_reservations
